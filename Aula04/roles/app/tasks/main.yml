@@ -1,0 +1,79 @@
+---
+# tasks file for app
+ 
+- name: Adicionar o repositório
+  become: yes
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+    codename: trusty 
+    update_cache: yes
+
+- name: Install PHP 7.4 and required PHP extensions
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ php_packages }}"
+
+- name: Install Node.js
+  become: yes
+  apt: 
+        name: nodejs
+        state: latest
+
+- name: Install Composer
+  become: yes
+  apt:
+        name: composer
+        state: latest
+
+- name: Install npm
+  become: yes
+  apt:
+        name: npm
+        state: latest
+
+- name: Clone Swap's Git repository
+  git:
+        repo: https://github.com/Hackathonners/swap
+        dest: ~/swap
+
+#- name: Move to Swap directory
+#  command: cd ~/swap
+
+- name: Install required packages with composer
+  command: composer install
+  args:
+    chdir: ~/swap
+
+- name: Use npm instead of yarn to install Swap
+  shell: npm install
+  args:
+    chdir: ~/swap
+
+- name: Generate .env file from template
+  template:
+        src: env_template.j2
+        dest: ~/swap/.env
+        owner: vagrant
+        mode: '0644'
+
+- name: Generate the application's key
+  shell: php artisan key:generate
+  args:
+    chdir: ~/swap
+
+- name: Run database migrations
+  shell: php artisan migrate
+  args:
+    chdir: ~/swap
+
+- name: Seed the database
+  shell: php artisan db:seed
+  args:
+    chdir: ~/swap
+
+- name: Start Swap
+  shell: nohup php artisan serve --host=0.0.0.0 > app_out.log 2>&1 &
+  args:
+    chdir: ~/swap
