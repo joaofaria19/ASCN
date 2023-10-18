@@ -1,8 +1,0 @@
-- name: Setup database
-  hosts: db
-  roles: 
-        -db
-- name: Setup Swap app
-  hosts: app
-  roles:
-        - app
