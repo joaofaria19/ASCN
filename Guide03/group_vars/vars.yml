@@ -1,0 +1,6 @@
+app_db_port: 3306
+app_db_name: swap
+app_db_user: teste
+app_db_password: "{{vault_db_password}}"
+app_db_ip: "{{ groups['db'][0] }}"
+app_user_ip: "{{ groups['app'][0] }}"

@@ -1,0 +1,17 @@
+- name: Generate the application's key
+  shell: php artisan key:generate
+  args:
+    chdir: ~/swap
+  when: seed_data|default(false) | bool
+
+- name: Run database migrations
+  shell: php artisan migrate
+  args:
+    chdir: ~/swap
+  when: seed_data|default(false) | bool
+
+- name: Seed the database
+  shell: php artisan db:seed
+  args:
+    chdir: ~/swap
+  when: seed_data|default(false) | bool
