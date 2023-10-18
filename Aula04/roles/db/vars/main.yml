@@ -1,0 +1,5 @@
+---
+# vars file for db
+db_packages:
+        - mysql-server
+        - python3-mysqldb
