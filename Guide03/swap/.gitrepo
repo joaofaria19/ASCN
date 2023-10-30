@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/Hackathonners/swap.git
+	branch = master
+	commit = 347f8e011da40aa22ebca7a3c82c7611243fc0ff
+	parent = 1a025784ef9382e856091f530cfa30cef174bda7
+	method = merge
+	cmdver = 0.4.6
