@@ -1,0 +1,53 @@
+---
+# Deployment for MySQL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swap-deployment
+  labels:
+    app: swap
+    tier: app
+spec:
+  selector:
+    matchLabels:
+      app: swap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: swap
+        tier: app
+    spec:
+      containers:
+      - name: swap
+        image: ascnuminho/swap
+        env: # The variables below could be set on a ConfigMap object
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: swap-config
+              key: DB_HOST
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: swap-config
+              key: DB_DATABASE
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: swap-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: swap-secret
+              key: password
+        - name: MIGRATE
+          valueFrom:
+            configMapKeyRef:
+              name: swap-config
+              key: MIGRATE
+        ports:
+        - containerPort: 8000
+        
